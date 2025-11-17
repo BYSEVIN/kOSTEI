@@ -20,3 +20,14 @@
 
 /* глобальные стили */
 @import "globalStyles.css";
+
+/* переменные */
+@import "variables.css";
+@import "colors.css";
+
+/* переменные */
+@import "variables.css";
+@import "colors.css";
+
+/* шрифты */
+@import "fonts.css"; 
