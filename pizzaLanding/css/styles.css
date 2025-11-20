@@ -2,15 +2,7 @@
 @import "blocks/header.css";
 @import "blocks/main.css";
 
-/* секции */
-@import "blocks/sections/cover.css";
-@import "blocks/sections/menu.css";
-@import "blocks/sections/reviews.css";
-@import "blocks/sections/chips.css";
-@import "blocks/sections/interior.css";
-@import "blocks/sections/reservation.css";
-
-/* секции */
+/* глобальные стили */
 @import "blocks/sections/cover.css";
 @import "blocks/sections/menu.css";
 @import "blocks/sections/reviews.css";
@@ -25,9 +17,10 @@
 @import "variables.css";
 @import "colors.css";
 
-/* переменные */
-@import "variables.css";
-@import "colors.css";
-
 /* шрифты */
-@import "fonts.css"; 
+@import "fonts.css";
+
+/* Блоки */
+@import "blocks/body.css";
+@import "blocks/hamburger.css";
+@import "blocks/nav-list.css";
