@@ -1,9 +1,0 @@
-.reservation {
-    background-color: var(--color-basic-1);
-    color: white;
-}
-
-.reservation__block {
-    display: flex;
-    justify-content: center;
-}
