@@ -19,3 +19,11 @@ def mysql_conn() -> Iterator[Connection]:
         yield conn
     finally:
         conn.close()
+
+@contextmanager
+def get_async_conn() -> Iterator[Connection]:
+    conn = pymysql.connect(**DB_CONFIG)
+    try:
+        yield conn
+    finally:
+        conn.close()

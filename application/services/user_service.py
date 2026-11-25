@@ -2,15 +2,51 @@ import pymysql
 import argon2
 from pymysql import Connection
 from typing import Optional
-
+from application.services.session_service import SessionService
 class UserService:
     def __init__(self, conn: Connection):
-        # Сохраняем соединение с БД, которое передаст FastAPI
         self.connection = conn
-        # Инициализируем хешер паролей
         self.PH = argon2.PasswordHasher()
+        self.session_service = SessionService(conn)
 
-    # --- READ (Чтение) ---
+    # --- АВТОРИЗАЦИЯ ---
+    def get_user_by_login(self, login: str) -> Optional[dict]:
+        cursor = self.connection.cursor(cursor=pymysql.cursors.DictCursor)
+        cursor.execute(
+            """
+            SELECT user_id,
+                   user_first_name as first_name,
+                   user_last_name as last_name,
+                   user_login as login,
+                   user_email as email,
+                   user_password_hash as password
+            FROM users
+            WHERE user_login = %s
+            """, (login,)
+        )
+        result = cursor.fetchone()
+        cursor.close()
+        return result
+
+    def authenticate(self, user: dict, password: str) -> bool:
+        try:
+            res = self.PH.verify(user['password'], password)
+            return res
+        except argon2.exceptions.VerifyMismatchError:
+            return False
+
+    def authorization(self, login: str, password: str) -> Optional[str]:
+        user = self.get_user_by_login(login)
+        if user is None:
+            return None
+        
+        # 2. Проверяем пароль
+        if self.authenticate(user, password):
+            # 3. Если пароль верный — создаем сессию и возвращаем её ID
+            return self.session_service.create_session(user['user_id'])
+        else:
+            return None
+
     def get_user_by_id(self, user_id: int) -> Optional[dict]:
         cursor = self.connection.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(
